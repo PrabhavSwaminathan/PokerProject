@@ -2,14 +2,26 @@ package com.company;
 import java.util.Arrays;
 
 public class Poker {
-    private int winner=0;
-    private String[] Player1 = new String[5];
-    private String[] Player2 = new String[5];
-    int[] number = new int[5];
-    char[] suit = new char[5];
+    private int winner;
+    private String[] Player1;
+    private String[] Player2;
+    int[] number;
+    char[] suit;
     private String[] Rank = {"High Card", "Pair", "Two Pairs", "Three Of A Kind", "Straight", "Flush", "Full House",
             "Four Of A Kind", "Straight Flush", "Royal Flush"};
-    PlayerCardRank playerCardRank = new PlayerCardRank();
+    private PlayerCardRank playerCardRank;
+
+    public Poker()
+    {
+        winner=0;
+        Player1 = new String[5];
+        Player2 = new String[5];
+        number = new int[5];
+        suit = new char[5];
+        playerCardRank = new PlayerCardRank();
+    }
+
+    //This is the driver function that is linked to all the other function and decides the winner of a round
     public int game(String[] allHands)
     {
 
@@ -53,11 +65,7 @@ public class Poker {
         }
         return winner;
     }
-
-    /*Returns 1 if Player 1 Wins
-      Returns 2 if Player 2 Wins
-      Returns 3 if it is a Draw
-    */
+    //A function that finds the winner if two ranks tie, i.e, two players have the same combination
     public int checkTie(String[] Player1, String[] Player2, int indexRank)
     {
         int result=0;
@@ -73,46 +81,10 @@ public class Poker {
             int cardOfPairPlayer2=0;
             splitArray(Player1);
             Arrays.sort(number);
-            for(int i=0;i<4;)
-            {
-                if(number[i]==number[i+1])
-                {
-                    cardOfPairPlayer1=number[i];
-                    break;
-                }
-                else
-                    i++;
-            }
-
-            for(int i=0;i<5;i++)
-            {
-                if(calcFrequency(number)[i]==2 || calcFrequency(number)[i] == -1)
-                    tempArrPlayer1[i]=0;
-                else
-                    tempArrPlayer1[i]=number[i];
-            }
-
-            Arrays.sort(tempArrPlayer1);
+            cardOfPairPlayer1 = getCardOfPairPlayer1(tempArrPlayer1, cardOfPairPlayer1);
             splitArray(Player2);
             Arrays.sort(number);
-            for(int i=0;i<4;)
-            {
-                if(number[i]==number[i+1])
-                {
-                    cardOfPairPlayer2=number[i];
-                    break;
-                }
-                else
-                    i++;
-            }
-            for(int i=0;i<5;i++)
-            {
-                if(calcFrequency(number)[i]==2 || calcFrequency(number)[i] == -1)
-                    tempArrPlayer2[i]=0;
-                else
-                    tempArrPlayer2[i]=number[i];
-            }
-            Arrays.sort(tempArrPlayer2);
+            cardOfPairPlayer2 = getCardOfPairPlayer1(tempArrPlayer2, cardOfPairPlayer2);
             if(cardOfPairPlayer1>cardOfPairPlayer2)
                 result = 1;
             else if((cardOfPairPlayer1<cardOfPairPlayer2))
@@ -305,6 +277,32 @@ public class Poker {
         return result;
     }
 
+    //A function to get the pair of cards a player holds.
+    public int getCardOfPairPlayer1(int[] tempArrPlayer1, int cardOfPairPlayer1) {
+        for(int i=0;i<4;)
+        {
+            if(number[i]==number[i+1])
+            {
+                cardOfPairPlayer1=number[i];
+                break;
+            }
+            else
+                i++;
+        }
+
+        for(int i=0;i<5;i++)
+        {
+            if(calcFrequency(number)[i]==2 || calcFrequency(number)[i] == -1)
+                tempArrPlayer1[i]=0;
+            else
+                tempArrPlayer1[i]=number[i];
+        }
+
+        Arrays.sort(tempArrPlayer1);
+        return cardOfPairPlayer1;
+    }
+
+    //Calculates the number of the rank of a given combination
     public int indexOfRank(String rank)
     {
         int index=0;
@@ -319,49 +317,9 @@ public class Poker {
         return index;
     }
 
-    public void splitArray(String[] handPlayer)
-    {
-        for (int i=0;i<5;i++) {
-            String num = handPlayer[i].substring(0,1);
-            if(num.equals("T"))
-                number[i]=10;
-            else if(num.equals("J"))
-                number[i]=11;
-            else if(num.equals("Q"))
-                number[i]=12;
-            else if(num.equals("K"))
-                number[i]=13;
-            else if(num.equals("A"))
-                number[i]=14;
-            else
-                number[i] = Integer.parseInt(num);
-            suit[i] = handPlayer[i].charAt(1);
-        }
-    }
-
-    public int[] calcFrequency(int[] number)
-    {
-        int visited = -1;
-        int frequency[] = new int[5];
-        for(int i=0;i<5;i++)
-        {
-            int count = 1;
-            for(int j = i+1; j < 5; j++) {
-                if (number[i] == number[j]) {
-                    count++;
-                    //To avoid counting same element again
-                    frequency[j] = visited;
-                }
-            }
-            if(frequency[i] != visited)
-                frequency[i] = count;
-        }
-        return frequency;
-    }
-
-
-
-
+    //A function to check the rank of cards the player holds in a given hand
+    //It starts from the highest rank {Royal Flush} and goes down to the lowest {High Card}
+    //If any condition is satisfied, the the loop ends and the result is returned.
     public String checkRank(String[] PlayerCards)
     {
         int check=0;
@@ -423,6 +381,7 @@ public class Poker {
         return rank;
     }
 
+    //A function to compare the highest card the players have
     public int highCardComparison(String[] Player1, String[] Player2)
     {
         int result=0;
@@ -487,6 +446,48 @@ public class Poker {
             }
         }
         return result;
+    }
+
+    //This functions splits the array of player cards into two separate arrays, one of numbers and one of suit
+    public void splitArray(String[] handPlayer)
+    {
+        for (int i=0;i<5;i++) {
+            String num = handPlayer[i].substring(0,1);
+            if(num.equals("T"))
+                number[i]=10;
+            else if(num.equals("J"))
+                number[i]=11;
+            else if(num.equals("Q"))
+                number[i]=12;
+            else if(num.equals("K"))
+                number[i]=13;
+            else if(num.equals("A"))
+                number[i]=14;
+            else
+                number[i] = Integer.parseInt(num);
+            suit[i] = handPlayer[i].charAt(1);
+        }
+    }
+
+    //This function calculates the frequency of all the cards a player has in a given hand
+    public int[] calcFrequency(int[] number)
+    {
+        int visited = -1;
+        int frequency[] = new int[5];
+        for(int i=0;i<5;i++)
+        {
+            int count = 1;
+            for(int j = i+1; j < 5; j++) {
+                if (number[i] == number[j]) {
+                    count++;
+                    //To avoid counting same element again
+                    frequency[j] = visited;
+                }
+            }
+            if(frequency[i] != visited)
+                frequency[i] = count;
+        }
+        return frequency;
     }
 }
 

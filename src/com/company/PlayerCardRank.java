@@ -2,10 +2,19 @@ package com.company;
 
 import java.util.Arrays;
 
+//A class that consists of all the combinations of cards in Poker
 public class PlayerCardRank {
+    private int result;
+
+    //A constructor to initialize the default value
+    public PlayerCardRank()
+    {
+        result = 0;
+    }
+
+    //A function to check if the set of player cards is a Royal Flush
     public int isRoyalFlush(int[] number,char[] suit)
     {
-        int result = 0;
         int checkSuit=0;
         int checkSequence=0;
         checkSuit = sameSuit(suit);
@@ -17,16 +26,16 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is a Flush
     public int isFlush(char[] suit)
     {
-        int result = 0;
         result = sameSuit(suit);
         return result;
     }
 
+    //A function to check if the set of player cards is a Straight Flush
     public int isStraightFlush(int[] number,char[] suit)
     {
-        int result = 0;
         int checkSuit=0;
         int checkSequence=0;
         checkSuit = sameSuit(suit);
@@ -38,9 +47,10 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is a Four of a Kind
+    //It calculates the frequency of all the cards and if a card has the frequency of 4, then the result is 1
     public int isFourOfAKind(int[] frequency)
     {
-        int result=0;
         for(int i = 0; i < 4;)
         {
             if(frequency[i] == 4)
@@ -55,9 +65,10 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is a Three of a Kind
+    //It calculates the frequency of all the cards and if a card has the frequency of 3, then the result is 1
     public int isThreeOfAKind(int[] frequency)
     {
-        int result=0;
         for(int i = 0; i < 4;)
         {
             if(frequency[i] == 3)
@@ -71,16 +82,18 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is Straight
+    //It calls the consecutive order function to check if the condition for Straight is satisfied
     public int isStraight(int[] number)
     {
-        int result = 0;
         result = consecutiveOrder(number);
         return result;
     }
 
+    //A function to check if the set of player cards is a Pair
+    //It calculates the frequency of all the cards and if a card has the frequency of 2, then the result is 1
     public int isPair(int[] frequency)
     {
-        int result=0;
         for(int i = 0; i < 4;)
         {
             if(frequency[i] == 2)
@@ -94,9 +107,10 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is Two Pair
+    //It calculates the frequency of all the cards and if two cards have the frequency of 2, then the result is 1
     public int isTwoPair(int[] frequency)
     {
-        int result=0;
         int count=0;
         for(int i = 0; i < 5;i++)
         {
@@ -110,10 +124,11 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is a Full House
+    //It checks if the cards are three of a kind and a pair, then the result is 1
     public int isFullHouse(int[] number)
     {
         Poker poker = new Poker();
-
         int result=0;
         int checkForThreeOfAKind = isThreeOfAKind(poker.calcFrequency(number));
         int checkForPair = isPair(poker.calcFrequency(number));
@@ -122,10 +137,10 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if the set of player cards is a High Card
+    //It calculates the frequency of all the cards and if the frequency of all cards is 1, then the result is 1
     public int isHighCard(int[] frequency)
     {
-        int result=0;
-        int count=0;
         for(int i = 0; i < 5;)
         {
             if(frequency[i] == 1)
@@ -142,9 +157,9 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to calculate if the player cards are in a consecutive order
     public int consecutiveOrder(int[] number)
     {
-        int result = 0;
         Arrays.sort(number);
         for(int i=0;i<4;)
         {
@@ -157,14 +172,12 @@ public class PlayerCardRank {
                 break;
             }
         }
-
         return result;
     }
 
-
+    //A function to calculate if the player cards are in a consecutive order from ten to ace being the highest
     public int highestConsecutiveOrder(int[] number)
     {
-        int result = 0;
         int expectedSequence[] = {10,11,12,13,14};
         Arrays.sort(number);
         for(int i=0;i<4;)
@@ -181,9 +194,9 @@ public class PlayerCardRank {
         return result;
     }
 
+    //A function to check if all the player cards belong to the same suit or not
     public int sameSuit(char suit[])
     {
-        int result=0;
         for(int i=0;i<4;)
         {
             if(suit[i]==suit[i+1])

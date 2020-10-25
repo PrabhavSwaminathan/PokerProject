@@ -3,13 +3,25 @@ package com.company;
 import java.io.*;
 public class ReadWrite
 {
-    int winner=0;
-    int countOfWinsPlayer1=0;
-    int countOfWinsPlayer2=0;
-    String output="";
+    private int winner; //Winner of the round of Poker
+    private int countOfWinsPlayer1; //Number of Rounds Won by Player 1
+    private int countOfWinsPlayer2; //Number of Rounds Won by Player 2
+    private String output; //Output to be written to the file
+    private String[] allHands; //Array to store input of all the hands
+
+    //A constructor to define the default values of all the attributes
+    public ReadWrite()
+    {
+        winner=0;
+        countOfWinsPlayer1=0;
+        countOfWinsPlayer2=0;
+        output="";
+        allHands = new String[10];
+    }
+
+    //A function to using Buffered Reader to read input file
     public void readFile()
     {
-        String[] allHands;
         try
         {
             File file=new File("poker-hands.txt");    //creates a new file instance
@@ -18,10 +30,11 @@ public class ReadWrite
             StringBuffer sb=new StringBuffer();    //constructs a string buffer with no characters
             String line;
 
+            //A loop that runs line by line till the end of file
             while((line=br.readLine())!=null)
             {
-                Poker poker = new Poker();
-                allHands = line.split(" ");
+                Poker poker = new Poker(); //An Object of the class Poker
+                allHands = line.split(" "); //Splits the line by space and adds all the elements to an Array
                 winner = poker.game(allHands);
                 if(winner==1)
                     countOfWinsPlayer1++;
@@ -36,15 +49,15 @@ public class ReadWrite
         }
         output = "Player 1: "+countOfWinsPlayer1+" hands"+"\n"+"Player 2: "+countOfWinsPlayer2+" hands";
         writeToFile(output);
-        System.out.println("Player 1: "+countOfWinsPlayer1+" hands");
-        System.out.println("Player 2: "+countOfWinsPlayer2+" hands");
+        System.out.println("Player 1: "+countOfWinsPlayer1+" hands"); //Displays Player 1 Wins
+        System.out.println("Player 2: "+countOfWinsPlayer2+" hands"); //Displays Player 2 Wins
     }
 
     public void writeToFile(String output) {
         BufferedWriter bw = null;
         try {
 
-            //Specify the file name and path here
+            //The output file name and path is specified here
             File file = new File("poker-hands-output.txt");
 
             if (!file.exists()) {
