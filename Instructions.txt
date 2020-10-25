@@ -1,0 +1,5 @@
+Download the project
+Open the PokerExercise\out\artifacts\PokerExercise_jar Folder
+Press Shift and right click to open command prompt or Powershell in that folder
+Type java -jar PokerExercise.jar and press enter.
+The command line should display the output and a new file named poker-hands-output.txt will be created.
